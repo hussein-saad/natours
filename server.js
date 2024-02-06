@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 const app = require('./app');
 
-const mongoDB = process.env.MONGODB_URL;
+const mongoDB = process.env.MONGODB_LOCAL_URL;
 
 connectDB();
 
