@@ -1,4 +1,4 @@
-const CustomError = require('./../utils/customError');
+const CustomError = require('./../utils/CustomError');
 
 const handleCastErrorDB = (err) => {
   const message = `Invalid ${err.path}: ${err.value}`;

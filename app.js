@@ -1,7 +1,7 @@
 const express = require('express');
 const morgan = require('morgan');
 
-const CustomError = require('./utils/customError');
+const CustomError = require('./utils/CustomError');
 const globalErrorHandler = require('./controllers/errorController');
 
 const tourRouter = require('./routes/tourRouter');
