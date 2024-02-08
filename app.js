@@ -2,6 +2,8 @@ const express = require('express');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+const mongoSanitize = require('express-mongo-sanitize');
+
 
 const CustomError = require('./utils/CustomError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -26,6 +28,9 @@ const limiter = rateLimit({
 app.use(limiter);
 
 app.use(express.json({ limit: '250kb' }));
+
+app.use(mongoSanitize());
+
 
 app.use(express.static(`${__dirname}/public`));
 
