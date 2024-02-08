@@ -25,7 +25,7 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
-app.use(express.json());
+app.use(express.json({ limit: '250kb' }));
 
 app.use(express.static(`${__dirname}/public`));
 
