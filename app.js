@@ -1,6 +1,6 @@
 const express = require('express');
 const morgan = require('morgan');
-const rateLimiter = require('express-rate-limiter');
+const rateLimit = require('express-rate-limit');
 
 const CustomError = require('./utils/CustomError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -14,9 +14,9 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-const limiter = rateLimiter({
-  max: 100,
-  windowMS: 15 * 60 * 1000,
+const limiter = rateLimit({
+  limit: 100,
+  windowMs: 15 * 60 * 1000,
   message: 'too many requests, please try again in 15 minutes',
 });
 
