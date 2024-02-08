@@ -1,11 +1,18 @@
 const util = require('util');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
+const rateLimit = require('express-rate-limit');
 
 const User = require('./../models/userModel');
 const catchAsync = require('./../utils/catchAsync');
 const CustomError = require('./../utils/CustomError');
 const sendEmail = require('./../utils/email');
+
+exports.loginLimiter = rateLimit({
+  limit: 5,
+  windowMs: 60 * 60 * 1000,
+  message: 'too many login attempts, please try again in an hour',
+});
 
 const sendToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
