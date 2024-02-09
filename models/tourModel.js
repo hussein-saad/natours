@@ -80,7 +80,7 @@ const tourSchema = new Schema(
       address: String,
       description: String,
     },
-    
+
     locations: [
       {
         type: {
@@ -94,12 +94,27 @@ const tourSchema = new Schema(
         day: Number,
       },
     ],
+    guides: [
+      {
+        type: mongoose.Schema.ObjectId,
+        ref: 'User',
+      },
+    ],
   },
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
   },
 );
+
+tourSchema.pre(/^find/, function (next) {
+  this.populate({
+    path: 'guides',
+    select: '-__v -passwordChangedAt',
+  });
+
+  next();
+});
 
 tourSchema.virtual('durationInWeeks').get(function () {
   return this.duration / 7, 2;
