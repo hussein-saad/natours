@@ -21,7 +21,7 @@ async function connectDB() {
 }
 
 async function createData() {
-  const data = JSON.parse(fs.readFileSync('./tours-simple.json', 'utf-8'));
+  const data = JSON.parse(fs.readFileSync('./tours.json', 'utf-8'));
   try {
     await Tour.create(data);
     console.log('data added');
