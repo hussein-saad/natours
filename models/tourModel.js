@@ -120,4 +120,10 @@ tourSchema.virtual('durationInWeeks').get(function () {
   return this.duration / 7, 2;
 });
 
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour',
+  localField: '_id',
+});
+
 module.exports = mongoose.model('Tour', tourSchema);
