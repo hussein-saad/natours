@@ -1,6 +1,7 @@
 const User = require('./../models/userModel');
 const CustomError = require('./../utils/CustomError');
 const catchAsync = require('./../utils/catchAsync');
+const handler = require('./handler');
 
 const filterBody = (body, ...allowedFields) => {
   let ret = {};
@@ -38,15 +39,6 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getAllUsers = catchAsync(async (req, res, next) => {
-  const users = await User.find();
-
-  res.status(200).json({
-    status: 'success',
-    data: { users },
-  });
-});
-
 exports.createUser = (req, res) => {
   res.status(500).json({
     status: 'error',
@@ -54,23 +46,7 @@ exports.createUser = (req, res) => {
   });
 };
 
-exports.getUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'route not defined',
-  });
-};
-
-exports.updateUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'route not defined',
-  });
-};
-
-exports.deleteUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'route not defined',
-  });
-};
+exports.getAllUsers = handler.getAll(User);
+exports.getUser = handler.getOne(User);
+exports.updateUser = handler.updateOne(User);
+exports.deleteUser = handler.deleteOne(User);
