@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 const Schema = mongoose.Schema;
 
@@ -101,6 +102,7 @@ const tourSchema = new Schema(
         ref: 'User',
       },
     ],
+    slug: String,
   },
   {
     toJSON: { virtuals: true },
@@ -110,6 +112,11 @@ const tourSchema = new Schema(
 
 tourSchema.index({ price: 1, ratingsAverage: -1 });
 tourSchema.index({ startLocation: '2dsphere' });
+
+tourSchema.pre('save', function (next) {
+  this.slug = slugify(this.name, { lower: true });
+  next();
+});
 
 tourSchema.pre(/^find/, function (next) {
   this.populate({
