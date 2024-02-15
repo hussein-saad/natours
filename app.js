@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
+const cookieParser = require('cookie-parser');
 
 const CustomError = require('./utils/CustomError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -37,6 +38,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 app.use(express.json({ limit: '250kb' }));
+app.use(cookieParser());
 
 app.use(mongoSanitize());
 
