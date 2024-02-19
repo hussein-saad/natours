@@ -7,6 +7,7 @@ const User = require('./../models/userModel');
 const catchAsync = require('./../utils/catchAsync');
 const CustomError = require('./../utils/CustomError');
 const sendEmail = require('./../utils/email');
+const exp = require('constants');
 
 exports.loginLimiter = rateLimit({
   limit: 5,
@@ -104,6 +105,15 @@ exports.isLoggedIn = async (req, res, next) => {
     }
   }
   next();
+};
+
+exports.logout = (req, res) => {
+  console.log('logout');
+  res.cookie('jwt', 'loggedout', {
+    expires: new Date(Date.now() + 10 * 1000),
+    httpOnly: true,
+  });
+  res.status(200).json({ status: 'success' });
 };
 
 exports.forgetPassword = catchAsync(async (req, res, next) => {
