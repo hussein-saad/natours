@@ -1,5 +1,6 @@
 const Tour = require('../models/tourModel');
 const catchAsync = require('../utils/catchAsync');
+const CustomError = require('../utils/CustomError');
 
 exports.getOverview = catchAsync(async (req, res) => {
   const tours = await Tour.find();
@@ -10,12 +11,16 @@ exports.getOverview = catchAsync(async (req, res) => {
   });
 });
 
-exports.getTourDetails = catchAsync(async (req, res) => {
+exports.getTourDetails = catchAsync(async (req, res,next) => {
   const { slug } = req.params;
   const tour = await Tour.findOne({ slug: slug }).populate({
     path: 'reviews',
     fields: 'review rating user',
   });
+
+  if (!tour) {
+    return next(new CustomError('There is no tour with that name', 404));
+  }
 
   res.status(200).render('tour', {
     title: `${tour.name} Tour`,
