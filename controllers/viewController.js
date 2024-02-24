@@ -11,7 +11,7 @@ exports.getOverview = catchAsync(async (req, res) => {
   });
 });
 
-exports.getTourDetails = catchAsync(async (req, res,next) => {
+exports.getTourDetails = catchAsync(async (req, res, next) => {
   const { slug } = req.params;
   const tour = await Tour.findOne({ slug: slug }).populate({
     path: 'reviews',
@@ -37,5 +37,11 @@ exports.getLoginForm = (req, res) => {
 exports.getSingupForm = (req, res) => {
   res.status(200).render('signup', {
     title: 'Create an account',
+  });
+};
+
+exports.getAccount = (req, res) => {
+  res.status(200).render('account', {
+    title: 'user account',
   });
 };
