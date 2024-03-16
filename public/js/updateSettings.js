@@ -1,19 +1,20 @@
 import axios from 'axios';
 import { showAlert } from './alerts';
+import {logout} from './login';
 
-export const updateData = async (name, email) => {
+export const updateData = async (data) => {
   try {
     const res = await axios({
       method: 'PATCH',
       url: 'http://localhost:3000/api/v1/users/updateMe',
-      data: {
-        name,
-        email,
-      },
+      data,
     });
 
     if (res.data.status === 'success') {
       showAlert('success', 'data updated successfully');
+      window.setTimeout(() => {
+        location.reload();
+      }, 1500);
     }
   } catch (err) {
     showAlert('error', err.response.data.message);
@@ -38,6 +39,7 @@ export const updatePassword = async (
 
     if (res.data.status === 'success') {
       showAlert('success', 'password updated successfully');
+      logout(); 
     }
   } catch (err) {
     showAlert('error', err.response.data.message);
