@@ -1,7 +1,37 @@
+const multer = require('multer');
+const sharp = require('sharp');
 const User = require('./../models/userModel');
 const CustomError = require('./../utils/CustomError');
 const catchAsync = require('./../utils/catchAsync');
 const handler = require('./handler');
+
+const multerStorage = multer.memoryStorage();
+
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith('image')) {
+    cb(null, true);
+  } else {
+    cb(new CustomError('Not an image, please try again', 400), false);
+  }
+};
+
+const upload = multer({ diskStorage: multerStorage, fileFilter: multerFilter });
+
+exports.uploadPhoto = upload.single('photo');
+exports.resizePhoto = (req, res, next) => {
+  if (!req.file) {
+    return next();
+  }
+
+  req.file.filename = `user-${req.user.id}-${Date.now()}.jpeg`;
+  sharp(req.file.buffer)
+    .resize(500, 500)
+    .toFormat('jpeg')
+    .jpeg({ quality: 90 })
+    .toFile(`public/img/users/${req.file.filename}`);
+
+  next();
+};
 
 const filterBody = (body, ...allowedFields) => {
   let ret = {};
@@ -23,7 +53,11 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     return next(new CustomError("you aren't allowed to change password", 400));
   }
 
-  const filteredBody = filterBody(req.body, 'name', 'email', 'photo');
+  const filteredBody = filterBody(req.body, 'name', 'email');
+  if (req.file) {
+    filteredBody.photo = req.file.filename;
+  }
+
 
   const user = await User.findByIdAndUpdate(req.user.id, filteredBody, {
     new: true,
