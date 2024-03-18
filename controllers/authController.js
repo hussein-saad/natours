@@ -6,8 +6,7 @@ const rateLimit = require('express-rate-limit');
 const User = require('./../models/userModel');
 const catchAsync = require('./../utils/catchAsync');
 const CustomError = require('./../utils/CustomError');
-const sendEmail = require('./../utils/email');
-const exp = require('constants');
+const Email = require('./../utils/email');
 
 exports.loginLimiter = rateLimit({
   limit: 5,
@@ -56,6 +55,9 @@ exports.signup = catchAsync(async (req, res, next) => {
     photo: req.body.photo,
     role: req.body.role,
   });
+
+  const url = `${req.protocol}://${req.get('host')}/me`;
+  await new Email(user, url).sendWelcome();
 
   createSendToken(user, 201, res);
 });
@@ -127,18 +129,12 @@ exports.forgetPassword = catchAsync(async (req, res, next) => {
 
   await user.save({ validateBeforeSave: false });
 
-  const resetURL = `${req.protocol}://${req.get(
-    'host',
-  )}/api/v1/users/resetPassword/${resetToken}`;
-
-  const message = `Forgot your password?\nsubmit a request with your new password to: ${resetURL}`;
-
   try {
-    await sendEmail({
-      email: user.email,
-      subject: 'password reset token',
-      message,
-    });
+    const resetURL = `${req.protocol}://${req.get(
+      'host',
+    )}/api/v1/users/resetPassword/${resetToken}`;
+
+    await new Email(user, resetURL).sendPasswordReset();
 
     res.status(200).json({
       status: 'success',
