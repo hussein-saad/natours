@@ -78,12 +78,7 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.createUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'route not defined',
-  });
-};
+
 
 exports.getAllUsers = handler.getAll(User);
 exports.getUser = handler.getOne(User);
