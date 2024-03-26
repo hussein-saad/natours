@@ -1,12 +1,14 @@
 import '@babel/polyfill';
 import { login, logout, signup } from './login';
 import { updateData, updatePassword } from './updateSettings';
+import { bookTour } from './stripe';
 
 const signupForm = document.querySelector('.form--signup');
 const loginForm = document.querySelector('.form--login');
 const logoutBtn = document.querySelector('.nav__el--logout');
 const userForm = document.querySelector('.form-user-data');
 const userPasswordForm = document.querySelector('.form-user-password');
+const bookBtn = document.getElementById('book-tour');
 
 if (signupForm) {
   console.log('signupForm');
@@ -52,5 +54,13 @@ if (userPasswordForm) {
     document.getElementById('password').value = '';
     document.getElementById('password-confirm').value = '';
     document.querySelector('.btn--save-password').textContent = 'save password';
+  });
+}
+
+if (bookBtn) {
+  bookBtn.addEventListener('click', (e) => {
+    e.target.textContent = 'Processing...';
+    const tourId = e.target.dataset.tourId;
+    bookTour(tourId);
   });
 }
