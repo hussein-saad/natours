@@ -6,7 +6,7 @@ export const updateData = async (data) => {
   try {
     const res = await axios({
       method: 'PATCH',
-      url: 'http://localhost:3000/api/v1/users/updateMe',
+      url: '/api/v1/users/updateMe',
       data,
     });
 
@@ -29,7 +29,7 @@ export const updatePassword = async (
   try {
     const res = await axios({
       method: 'PATCH',
-      url: 'http://localhost:3000/api/v1/users/updatePassword',
+      url: '/api/v1/users/updatePassword',
       data: {
         currentPassword,
         password,
