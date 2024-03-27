@@ -7,6 +7,7 @@ const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const hpp = require('hpp');
 const cookieParser = require('cookie-parser');
+const compression = require('compression');
 
 const CustomError = require('./utils/CustomError');
 const globalErrorHandler = require('./controllers/errorController');
@@ -57,6 +58,8 @@ app.use(
     ],
   }),
 );
+
+app.use(compression());
 
 app.use('/', viewRouter);
 app.use('/api/v1/tours', tourRouter);
