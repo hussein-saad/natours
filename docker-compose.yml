@@ -1,6 +1,7 @@
 version: '3.8'
 services:
   app:
+    container_name: natours-app
     image: husseinsaad1/natours:latest
     ports:
       - '3000:3000'
@@ -8,17 +9,23 @@ services:
       - ./docker.env
     depends_on:
       - mongo
+    networks:
+      - natours-network
 
   mongo:
+    container_name: natours-db
     image: mongo:5.0
     volumes:
       - mongo-data:/data/db
     ports:
       - '27018:27017'
+    networks:
+      - natours-network
 
 networks:
-  default:
+  natours-network:
     driver: bridge
+    name: natours-network
 
 volumes:
   mongo-data:
