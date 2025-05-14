@@ -20,7 +20,6 @@ A tour booking application built with Node.js, Express, and MongoDB.
 - **Containerization**: Docker and Docker Compose
 - **Payment Processing**: Stripe API
 
-
 ## Development Setup
 
 For local development without Docker:
@@ -48,15 +47,15 @@ STRIPE_SECRET_KEY=your_stripe_secret_key
 
 ### Install dependencies
 
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
 
 ### Start the development server
-   ```bash
-   npm run dev
-   ```
 
+```bash
+npm run dev
+```
 
 ## Docker Setup
 
@@ -94,22 +93,19 @@ docker compose up -d
 
 This will start both the Node.js application and MongoDB database in detached mode.
 
-
 ### Data Import
 
 To import sample data into MongoDB:
 
 ```bash
-docker exec -it natours-app-1 node ./dev-data/data/import-dev-data.js --import
+docker exec -it natours-app node ./dev-data/data/import-dev-data.js --import
 ```
 
 To delete all data:
 
 ```bash
-docker exec -it natours-app-1 node ./dev-data/data/import-dev-data.js --delete
+docker exec -it natours-app node ./dev-data/data/import-dev-data.js --delete
 ```
-
-
 
 ### DockerHub Integration
 
@@ -118,7 +114,6 @@ The Docker image for this application is available on DockerHub. You can pull it
 ```bash
 docker pull husseinsaad1/natours:latest
 ```
-
 
 ### Docker Compose Architecture
 
@@ -135,12 +130,16 @@ The application is orchestrated using Docker Compose and consists of:
    - Persistent data storage via Docker volumes
    - Exposed on port 27018 (mapped from 27017)
 
+3. **Network Configuration**:
+   - Dedicated bridge network (`natours-network`) between app and MongoDB services
+   - Isolated communication between the application and database
+   - Enhanced security by isolating database from external networks
+
 ### Docker Commands
 
 - Start the services: `docker-compose up -d`
 - Stop the services: `docker-compose down`
 - View logs: `docker-compose logs -f app`
-
 
 ## Security Best Practices
 
